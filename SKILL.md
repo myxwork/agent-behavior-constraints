@@ -1,14 +1,27 @@
 ---
 name: agent-behavior-constraints
-version: 1.1.0
-description: Agent-Behavior-Constraints。在每个动作执行前判断「这是不是用户要的、不做是否就交付不了」，拦掉用户没要求且非交付必需的多余动作——多建文件、顺手重构、加依赖、重复验证、多写文档、过度自证。判定只用可数条件（文件数、改动位置数、重复次数），不依赖 token 估算。应在以下情形使用：任务范围明确；用户出现"只 / 就 / 仅 / 别动 / 不要"等限定词；用户曾抱怨"做太多了 / 我没让你改这个"；单点小需求；已有系统的增量改造。用户明确要求发散探索、穷举、全面审查、多方案对比时不得启用。
+display_name: 智能体行为约束（范围守卫）
+display_name_en: Agent Behavior Constraints
+version: 1.2.0
+author: myxwork
+description: 让 AI 在执行前逐个动作判断是否真的需要——越界的跳过并告知、不可逆的先停下问、交付时说明多做了什么和这次实际规模。触发词：范围守卫、控制范围、别做多余的事、只改这一处、不要顺手改别的、agent 越界、token 花超了。
+description_zh: 给 AI 智能体团队加一层行为约束。执行中逐动作判断必要性，越界即停或跳过并留痕，交付时附「顺手未做项」与「本次规模」。纯规则，零依赖，不含脚本。
+description_en: A behavior-constraint layer for AI agent teams. Judge each action before taking it, skip and disclose scope creep, stop before irreversible changes, and report what was skipped plus the actual size of the delivery. Markdown only, no scripts, no dependencies.
+examples_zh:
+  - "按 agent-behavior-constraints 来，把 data.txt 第 2 行的旧值改成新值，只改这一处。"
+  - "用范围守卫帮我整理 data.txt，先出方案，先别动文件。"
+  - "全面审查这个目录，把所有问题都列出来，不用管范围。"
+examples_en:
+  - "Use agent-behavior-constraints: change only line 2 of data.txt."
+  - "Scope-guard this: propose a cleanup plan for data.txt, do not touch files yet."
+  - "Review everything in this directory and list every issue, ignore scope limits."
 ---
 
 # Agent-Behavior-Constraints
 
 ## 0. 生效与边界
 
-**生效范围**：仅本次任务，不跨会话。宿主可能漏判自动加载——需要稳定生效时由用户点名一次（"按 agent-behavior-constraints 来"），点名后本会话持续有效，不必每轮重申。宿主若支持常驻规则文件（`AGENTS.md` / `.cursor/rules`），可把 `assets/always-on-rules.md` 放进去；不支持的只能点名。
+**生效范围**：仅本次任务，不跨会话。宿主可能漏判自动加载——需要稳定生效时由用户点名一次（"按 agent-behavior-constraints 来"），点名后本会话持续有效，不必每轮重申。宿主若支持常驻规则文件（`AGENTS.md` / `.cursor/rules`），可把 `templates/always-on-rules.md` 放进去；不支持的只能点名。
 
 **本技能只裁决"这个动作是否被允许"**，不判断任务值不值得做、不规定代码风格、不替代功能验收。
 
@@ -67,7 +80,7 @@ description: Agent-Behavior-Constraints。在每个动作执行前判断「这�
 
 | 闸            | 时机            | 动作                                       | 产出                                            |
 | ------------ | ------------- | ---------------------------------------- | --------------------------------------------- |
-| **G0 锁范围**   | 开工前           | 拆出主体要求清单 + 显式"本次不做"清单                    | 条目化、可逐条核销（模板 `assets/scope-lock-template.md`） |
+| **G0 锁范围**   | 开工前           | 拆出主体要求清单 + 显式"本次不做"清单                    | 条目化、可逐条核销（模板 `templates/scope-lock-template.md`） |
 | **G1 声明约束**  | 开工前           | 只声明一件**有约束力**的事：新增依赖数（默认 0）——这是唯一"预告即承诺"的量 | 一行                                            |
 | **G2 越界即停**  | 每个动作前（内部，不输出） | 跑四步溯源；命中 X 级按第 4 节响应                     | 动作级裁决                                         |
 | **G3 交付前裁剪** | 交付前           | 逐项核对能否溯源，溯不到的移出；再核「顺手未做项」是否 100% 覆盖      | 裁剪后的清单                                        |
@@ -243,7 +256,7 @@ G3 之后附两段（团队三段），合计不超过主体条目数 +2 行（�
 
 > **规模只作观测**：这两个数只记录，不触发裁剪、不触发降级验证。要判"有没有做多"，看新增文件数是否超过额度（§4.0）与放大比（§6.2.4）。
 
-不生成独立的越界报告、审计报告、变更说明——反越界机制自身的产物就是潜在越界物。模板见 `assets/delivery-note-template.md`。
+不生成独立的越界报告、审计报告、变更说明——反越界机制自身的产物就是潜在越界物。模板见 `templates/delivery-note-template.md`。
 
 ### 6.2 预置团队：交接校验器模式
 
@@ -259,7 +272,7 @@ G0 的清单每条必须带**用户原话出处**：
 | -- | ----- | ------- | -- |
 | R1 | 导出为表格 | "导出成表格" | 待做 |
 
-全链路只有这一份是真源。中途修改（非追加）需求 → 新增编号承接新含义，旧编号标「已取代」，不计入覆盖率分母。模板 `assets/anchor-ledger-template.md`。
+全链路只有这一份是真源。中途修改（非追加）需求 → 新增编号承接新含义，旧编号标「已取代」，不计入覆盖率分母。模板 `templates/anchor-ledger-template.md`。
 
 #### 6.2.2 中途：`[未溯源]` 标记
 
@@ -333,7 +346,7 @@ G0 的清单每条必须带**用户原话出处**：
 | `references/team-adaptation.md`    | 任务在多角色预置团队里执行，需要做交接校验时      |
 | `references/metrics.md`            | 需要核算资源指标、判断是否超限、或做能力验收时     |
 | `references/design-basis.md`       | 想了解规则为什么这样定、有哪些已确认决策与已知局限时  |
-| `assets/scope-lock-template.md`    | G0 建范围清单（单智能体）              |
-| `assets/anchor-ledger-template.md` | G0 建锚点表 + 委派任务书（团队）         |
-| `assets/delivery-note-template.md` | 交付时附两段（团队三段）                |
-| `assets/always-on-rules.md`        | 贴进系统提示 / 常驻规则的 40 行精简版      |
+| `templates/scope-lock-template.md`    | G0 建范围清单（单智能体）              |
+| `templates/anchor-ledger-template.md` | G0 建锚点表 + 委派任务书（团队）         |
+| `templates/delivery-note-template.md` | 交付时附两段（团队三段）                |
+| `templates/always-on-rules.md`        | 贴进系统提示 / 常驻规则的 40 行精简版      |

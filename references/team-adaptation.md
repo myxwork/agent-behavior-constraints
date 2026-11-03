@@ -70,7 +70,7 @@
 
 第 ③ 段是关键：它把"是否越界"的判断从"主观"变成"有没有标"。**成员不需要判断什么算越界，只需要诚实标注。**
 
-模板见 `assets/anchor-ledger-template.md` 第二节。
+模板见 `templates/anchor-ledger-template.md` 第二节。
 
 ---
 

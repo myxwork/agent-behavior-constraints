@@ -113,13 +113,13 @@
 
 | 用法 | 怎么做 | 可靠性 |
 |---|---|---|
-| **① 贴常驻规则** | 把 [`assets/always-on-rules.md`](assets/always-on-rules.md) 的约 40 行贴进**专家提示**，或每个任务的**第一条消息** | 最高，每次都在场 |
+| **① 贴常驻规则** | 把 [`templates/always-on-rules.md`](templates/always-on-rules.md) 的约 40 行贴进**专家提示**，或每个任务的**第一条消息** | 最高，每次都在场 |
 | **② 点名一次** | 每个任务第一次开口说一句"按 agent-behavior-constraints 来" | 高，**一次管整段会话** |
 | ③ 只靠自动触发 | 什么都不做 | **低，实测会漏** |
 
 **推荐**：长期用 → ①；临时用 → ②。② 的成本比想象的低——**说一次就够，不用每轮重申**。
 
-`assets/always-on-rules.md` 是专门为"贴进提示"做的精简版（约 40 行），不是技能文件的替代品——它保证最小可用行为（两栏清单、三问、两段交付输出），细节判定仍需读 `SKILL.md`。
+`templates/always-on-rules.md` 是专门为"贴进提示"做的精简版（约 40 行），不是技能文件的替代品——它保证最小可用行为（两栏清单、三问、两段交付输出），细节判定仍需读 `SKILL.md`。
 
 另外一点：用户级目录（`~/.workbuddy/skills/`）和项目级（`.workbuddy/skills/`）只是**可见范围**不同，都**不代表自动执行**。
 
@@ -145,7 +145,7 @@ agent-behavior-constraints/
 │   ├── team-adaptation.md         预置团队适配：锚点表 / 标记 / 三问 / 度量
 │   ├── metrics.md                 全套可数指标口径
 │   └── design-basis.md            规则为什么这样定 + 已知局限 + 历次裁决
-└── assets/
+└── templates/
     ├── scope-lock-template.md     范围清单模板（单智能体）
     ├── anchor-ledger-template.md  锚点表 + 委派任务书（团队）
     └── delivery-note-template.md  交付说明模板
@@ -215,8 +215,9 @@ Copyright (c) 2026 myxwork — https://github.com/myxwork/agent-behavior-constra
 
 ## 10. 版本
 
-当前版本 **v1.1**。v1.0 为首个公开发布版，此前的内部迭代记录不在本仓库维护。此后每次发布在此追加一行。
+当前版本 **v1.2**。v1.0 为首个公开发布版，此前的内部迭代记录不在本仓库维护。此后每次发布在此追加一行。
 
 | 版本 | 日期 | 变更 |
 |---|---|---|
+| **v1.2** | 2026-11-03 | **结构对齐开放平台规范**：`assets/` 改名 `templates/`（平台只认 `references`/`scripts`/`templates`，9 处引用同步更新）；frontmatter 补齐平台要求的 8 个字段（`display_name`/`display_name_en`/`description_zh`/`description_en`/`version`/`author`/`examples_zh`/`examples_en`）；去掉一处指向包外 README 的引用。**规则内容零改动** |
 | **v1.1** | 2026-11-03 | 版本口径整理：对外只保留从本版起的变更记录；修正三处被误改的数字（章节引用 `SKILL.md §0.2`、阈值 `≤0.3`、示例 `≈0.7`）；正文中的历史版本标记一并移除。**规则内容无变化** |
