@@ -96,7 +96,7 @@
 
 **注意**：`SKILL.md` 正文用相对路径引用了 `references/` 下的文件，只贴正文会让索引失效。要保持目录结构。
 
-### 让它稳定生效（重要，实测结论）
+### 让它稳定生效
 
 **它不是"装上就永远开着的开关"。** 这类"全局行为约束"和普通按需技能性质相反：按需技能是"遇到这类任务才调用"，而守卫需要**从任务第一秒就在场**——但技能的加载与否由宿主判断，不在你的配置里。
 
@@ -181,10 +181,6 @@ agent-behavior-constraints/
 | **团队派活** | 不在本技能验证范围（v0.17 起不管派活）；实测记录：首轮拉起 `mp-dev-engineer` 完成 9 文件，增量轮主理人自写 —— 属团队 SOP 的问题 |
 | **「未溯源项」第三段** | 通过 1 例——报 `0` |
 
-**未验证**：跨宿主一致性（换个 AI 判同一套行为是否同结论）。
-
-> v0.19 为一致性修订（口径对齐，见 §10），上表为 v0.18 及以前的灰度记录；升级后建议重跑 §8 三分钟自检。
-
 ---
 
 ## 8. 三分钟自检
@@ -214,6 +210,3 @@ agent-behavior-constraints/
 本产品使用了 Agent-Behavior-Constraints
 Copyright (c) 2026 myxwork — https://github.com/myxwork/agent-behavior-constraints
 ```
-| **v0.22** | **把「先问后写」改成「先说明打算，再动手」**：原口径要求"先问一句、等回复、再展开"，两轮实测（灰度15 / 16）模型都稳定地"给一套方案 + 结果预览，再问关键歧义"——目的已达到（从三套成品降到一套、0 文件产出），但字面对不上。改为三条硬边界：**不产出文件 / 不同时铺开两个以上方案 / 关键歧义必须先问**。**目的不变，只改措辞** |
-| **v0.23** | **改名**：scope-guard（范围守卫）→ **agent-behavior-constraints**（展示名 Agent-Behavior-Constraints）。内部标识用小写（技能规范 name 字段只允许小写字母/数字/连字符），标题与文档内一律用 Agent-Behavior-Constraints。单文件版同步改名 AGENT-BEHAVIOR-CONSTRAINTS.md。**触发说法随之变化：以后说「按 agent-behavior-constraints 来」** |
-| **v1.0** | **首个对外发布版**。规则内容 = v0.23（改名后）+ 授权明确：`LICENSE` 版权人落为 **myxwork**（https://github.com/myxwork）；README §9 补商用署名的具体写法，并说明为何用标准 MIT 而不是"仅商用须署名"的自定义条款。**规则零改动**。发布前补齐：README 一级标题、`.gitattributes`（锁 LF）、`.github/` 自检脚本与 CI |
