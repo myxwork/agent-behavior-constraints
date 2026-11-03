@@ -1,0 +1,20 @@
+# ---- 系统 / 编辑器 ----
+.DS_Store
+Thumbs.db
+desktop.ini
+._*
+.vscode/
+.idea/
+*.swp
+
+# ---- 本地开发产物（含本机路径，绝不可入库）----
+_sandbox*/
+_test-docs/
+deliverables/
+*.zip
+*.log
+*.tmp
+__pycache__/
+
+# ---- 宿主运行时目录 ----
+.workbuddy/
